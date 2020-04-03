@@ -1,8 +1,11 @@
 #' @import data.table
 #' @import paradox
+#' @import mlr3
 #' @import mlr3misc
+#' @import mlr3proba
+#' @import survival
+#' @import distr6
 #' @importFrom R6 R6Class
-#' @importFrom mlr3 mlr_learners LearnerClassif LearnerRegr
 "_PACKAGE"
 
 # nocov start
@@ -11,8 +14,8 @@ register_mlr3 = function(libname, pkgname) {
   x = utils::getFromNamespace("mlr_learners", ns = "mlr3")
 
   # add the learner to the dictionary
-  x$add("<type>.<algorithm>", <algorithm>)
-  # Example: x$add("regr.gamboost", LearnerRegrGAMBoost)
+  x$add("surv.nelson", LearnerSurvNelson)
+  x$add("surv.parametric", LearnerSurvParametric)
 }
 
 .onLoad = function(libname, pkgname) { # nolint
@@ -25,7 +28,7 @@ register_mlr3 = function(libname, pkgname) {
   event = packageEvent("mlr3", "onLoad")
   hooks = getHook(event)
   pkgname = vapply(hooks, function(x) environment(x)$pkgname, NA_character_)
-  setHook(event, hooks[pkgname != "<package>"],
+  setHook(event, hooks[pkgname != "mlr3learners.survival"],
     action = "replace")
 }
 # nocov end

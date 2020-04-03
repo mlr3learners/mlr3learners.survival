@@ -1,4 +1,4 @@
 library(testthat)
-library(mlr3learnertemplate)
+library(mlr3learners.survival)
 
-test_check("mlr3learnertemplate")
+test_check("mlr3learners.survival")
