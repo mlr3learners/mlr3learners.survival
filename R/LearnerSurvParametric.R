@@ -21,7 +21,8 @@
 #' `type` hyper-parameter. These are as follows, with respective survival functions,
 #' * Accelerated Failure Time (`aft`) \deqn{S(t) = S_0(\frac{t}{exp(lp)})}{S(t) = S0(t/exp(lp))}
 #' * Proportional Hazards (`ph`) \deqn{S(t) = S_0(t)^{exp(lp)}}{S(t) = S0(t)^exp(lp)}
-#' * Proportional Odds (`po`) \deqn{S(t) = \frac{S_0(t)}{exp(-lp) + (1-exp(-lp)) S_0(t)}}{S(t) = S0(t) / [exp(-lp) + S0(t) (1-exp(-lp))]}
+#' * Proportional Odds (`po`) \deqn{S(t) =
+#' \frac{S_0(t)}{exp(-lp) + (1-exp(-lp)) S_0(t)}}{S(t) = S0(t) / [exp(-lp) + S0(t) (1-exp(-lp))]}
 #'
 #' where \eqn{S_0}{S0} is the estimated baseline survival distribution (in this case
 #' with a given parametric form), and \eqn{lp} is the predicted linear predictor.
@@ -44,7 +45,8 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         id = "surv.parametric",
         param_set = ParamSet$new(
           params = list(
-            ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"), tags = "predict"),
+            ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"),
+                         tags = "predict"),
             ParamUty$new(id = "na.action", tags = "train"),
             ParamFct$new(id = "dist", default = "weibull",
               levels = c("weibull", "exponential", "gaussian", "logistic",
@@ -89,8 +91,9 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
 
       fit = invoke(survival::survreg, formula = task$formula(), data = task$data(), .args = pv)
 
-      # Fits the baseline distribution by reparameterising the fitted coefficients. These were mostly
-      # derived numerically as precise documentation on the parameterisations is hard to find.
+      # Fits the baseline distribution by reparameterising the fitted coefficients.
+      # These were mostly derived numerically as precise documentation on the parameterisations is
+      # hard to find.
       location = as.numeric(fit$coefficients[1])
       scale = fit$scale
       eps = .Machine$double.xmin
@@ -128,7 +131,8 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
       # As we are using a custom predict method the missing assertions are performed here manually
       # (as opposed to the automatic assertions that take place after prediction)
       if (any(is.na(data.frame(task$data(cols = task$feature_names))))) {
-        stop(sprintf("Learner %s on task %s failed to predict: Missing values in new data (line(s) %s)\n",
+        stop(sprintf("Learner %s on task %s failed to predict: Missing values in new data (line(s)
+%s)\n",
           self$id, task$id,
           paste0(which(is.na(data.frame(task$data(cols = task$feature_names)))), collapse = ", ")))
       }

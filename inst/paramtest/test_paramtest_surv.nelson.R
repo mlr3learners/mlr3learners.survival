@@ -9,7 +9,7 @@ test_that("surv.nelson", {
 
   ParamTest = run_paramtest(learner, fun, exclude)
   expect_true(ParamTest, info = paste0("\nMissing parameters:\n",
-    paste0("- '", ParamTest$missing,"'", collapse = "\n")))
+    paste0("- '", ParamTest$missing, "'", collapse = "\n")))
 })
 
 # test_that("surv.survfit_control", {
