@@ -35,23 +35,23 @@ test_that("manualtest - aft", {
   expect_equal(p$lp[1:20], predict(learner$model$fit, type = "lp")[1:20])
   expect_equal(p$distr[1]$survival(predict(
     learner$model$fit, type = "quantile", p = c(0.2, 0.8)
-  )[1,]), c(0.8, 0.2))
+  )[1, ]), c(0.8, 0.2))
   expect_equal(p$distr[10]$cdf(predict(
     learner$model$fit, type = "quantile", p = seq.int(0, 1, 0.1)
-  )[10,]),
+  )[10, ]),
   seq.int(0, 1, 0.1))
 
   learner = lrn("surv.parametric", dist = "lognormal", type = "aft")$train(task)
   p = learner$predict(task)
   expect_equal(p$distr[15]$cdf(predict(
     learner$model$fit, type = "quantile", p = seq.int(0, 1, 0.1)
-  )[15,]), seq.int(0, 1, 0.1))
+  )[15, ]), seq.int(0, 1, 0.1))
 
   learner = lrn("surv.parametric", dist = "loglogistic", type = "aft")$train(task)
   p = learner$predict(task)
   expect_equal(p$distr[15]$cdf(predict(
     learner$model$fit, type = "quantile", p = seq.int(0, 1, 0.1)
-  )[15,]), seq.int(0, 1, 0.1))
+  )[15, ]), seq.int(0, 1, 0.1))
 })
 
 
