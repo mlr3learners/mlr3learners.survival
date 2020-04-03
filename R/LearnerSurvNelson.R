@@ -34,7 +34,7 @@ LearnerSurvNelson = R6Class("LearnerSurvNelson", inherit = LearnerSurv,
         feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered"),
         properties = "missings",
         packages = c("survival")
-     )
+      )
     }
   ),
 
@@ -44,6 +44,7 @@ LearnerSurvNelson = R6Class("LearnerSurvNelson", inherit = LearnerSurv,
     },
 
     .predict = function(task) {
+
       # Ensures that at all times before the first observed time the cumulative hazard is 0, as expected.
       # cumhaz = c(0, self$model$cumhaz)
       # time = c(0, self$model$time)
@@ -51,10 +52,10 @@ LearnerSurvNelson = R6Class("LearnerSurvNelson", inherit = LearnerSurv,
       # Define WeightedDiscrete distr6 distribution from the cumulative hazard
       x = rep(list(data = data.frame(x = self$model$time, cdf = 1 - exp(-self$model$cumhaz))), task$nrow)
       distr = distr6::VectorDistribution$new(distribution = "WeightedDiscrete", params = x,
-                                             decorators = c("CoreStatistics", "ExoticStatistics"))
+        decorators = c("CoreStatistics", "ExoticStatistics"))
 
       # Define crank as the mean of the survival distribution
-      crank = as.numeric(sum(x[[1]][,1] * c(x[[1]][,2][1], diff(x[[1]][,2]))))
+      crank = as.numeric(sum(x[[1]][, 1] * c(x[[1]][, 2][1], diff(x[[1]][, 2]))))
 
       PredictionSurv$new(task = task, crank = rep(crank, task$nrow), distr = distr)
     }

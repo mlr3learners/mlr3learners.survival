@@ -44,24 +44,24 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         id = "surv.parametric",
         param_set = ParamSet$new(
           params = list(
-            ParamFct$new(id = "type", default = "aft", levels = c("aft","ph","po"), tags = "predict"),
+            ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"), tags = "predict"),
             ParamUty$new(id = "na.action", tags = "train"),
             ParamFct$new(id = "dist", default = "weibull",
-                         levels = c("weibull", "exponential", "gaussian", "logistic",
-                                    "lognormal","loglogistic"), tags = "train"),
+              levels = c("weibull", "exponential", "gaussian", "logistic",
+                "lognormal", "loglogistic"), tags = "train"),
             ParamUty$new(id = "parms", tags = "train"),
             ParamUty$new(id = "init", tags = "train"),
             ParamDbl$new(id = "scale", default = 0, lower = 0, tags = "train"),
             ParamInt$new(id = "maxiter", default = 30L, tags = "train"),
             ParamDbl$new(id = "rel.tolerance", default = 1e-09, tags = "train"),
             ParamDbl$new(id = "toler.chol", default = 1e-10, tags = "train"),
-            ParamInt$new(id = "debug", default = 0, lower = 0 , upper = 1, tags = "train"),
+            ParamInt$new(id = "debug", default = 0, lower = 0, upper = 1, tags = "train"),
             ParamInt$new(id = "outer.max", default = 10L, tags = "train"),
             ParamLgl$new(id = "robust", default = FALSE, tags = "train"),
             ParamLgl$new(id = "score", default = FALSE, tags = "train")
           )
         ),
-        predict_types = c("distr","lp","crank"),
+        predict_types = c("distr", "lp", "crank"),
         feature_types = c("logical", "integer", "numeric", "factor"),
         properties = "weights",
         packages = c("survival")
@@ -71,8 +71,9 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
 
   private = list(
     .train = function(task) {
+
       # Passes control parameters to survreg.control
-      pars_ctrl = c("maxiter","rel.tolerance","toler.chol","debug","outer.max")
+      pars_ctrl = c("maxiter", "rel.tolerance", "toler.chol", "debug", "outer.max")
       pv = self$param_set$get_values(tags = "train")
       pv = pv[names(pv) %in% pars_ctrl]
       ctrl = invoke(survival::survreg.control, .args = pv)
@@ -94,27 +95,29 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
       scale = fit$scale
       eps = .Machine$double.xmin
 
-      if(scale == 0)
+      if (scale == 0) {
         scale = eps
+      }
 
-      if(location < -709 & fit$dist %in% c("weibull", "exponential", "loglogistic"))
+      if (location < -709 & fit$dist %in% c("weibull", "exponential", "loglogistic")) {
         location = -709
+      }
 
 
       basedist = switch(fit$dist,
-                        "gaussian" = distr6::Normal$new(mean = location, sd = scale,
-                                                        decorators = "ExoticStatistics"),
-                        "weibull" = distr6::Weibull$new(shape = 1/scale, scale = exp(location),
-                                                        decorators = "ExoticStatistics"),
-                        "exponential" = distr6::Exponential$new(scale = exp(location),
-                                                                decorators = "ExoticStatistics"),
-                        "logistic" = distr6::Logistic$new(mean = location, scale = scale,
-                                                          decorators = "ExoticStatistics"),
-                        "lognormal" = distr6::Lognormal$new(meanlog = location, sdlog = scale,
-                                                            decorators = "ExoticStatistics"),
-                        "loglogistic" = distr6::Loglogistic$new(scale = exp(location),
-                                                                shape = 1/scale,
-                                                                decorators = "ExoticStatistics")
+        "gaussian" = distr6::Normal$new(mean = location, sd = scale,
+          decorators = "ExoticStatistics"),
+        "weibull" = distr6::Weibull$new(shape = 1 / scale, scale = exp(location),
+          decorators = "ExoticStatistics"),
+        "exponential" = distr6::Exponential$new(scale = exp(location),
+          decorators = "ExoticStatistics"),
+        "logistic" = distr6::Logistic$new(mean = location, scale = scale,
+          decorators = "ExoticStatistics"),
+        "lognormal" = distr6::Lognormal$new(meanlog = location, sdlog = scale,
+          decorators = "ExoticStatistics"),
+        "loglogistic" = distr6::Loglogistic$new(scale = exp(location),
+          shape = 1 / scale,
+          decorators = "ExoticStatistics")
       )
 
       set_class(list(fit = fit, basedist = basedist), "surv.parametric")
@@ -124,22 +127,23 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
 
       # As we are using a custom predict method the missing assertions are performed here manually
       # (as opposed to the automatic assertions that take place after prediction)
-      if(any(is.na(data.frame(task$data(cols = task$feature_names)))))
+      if (any(is.na(data.frame(task$data(cols = task$feature_names))))) {
         stop(sprintf("Learner %s on task %s failed to predict: Missing values in new data (line(s) %s)\n",
-                     self$id, task$id,
-                     paste0(which(is.na(data.frame(task$data(cols = task$feature_names)))), collapse = ", ")))
+          self$id, task$id,
+          paste0(which(is.na(data.frame(task$data(cols = task$feature_names)))), collapse = ", ")))
+      }
 
       pv = self$param_set$get_values(tags = "predict")
 
       # Call the predict method defined in mlr3proba
       pred = invoke(predict_survreg, object = self$model, task = task, .args = pv)
 
-      if(is.null(self$param_set$values$type)){
+      if (is.null(self$param_set$values$type)) {
         return(PredictionSurv$new(task = task, distr = pred$distr, crank = pred$lp, lp = pred$lp,
-                                  response = exp(pred$lp)))
-      } else if(self$param_set$values$type == "aft"){
+          response = exp(pred$lp)))
+      } else if (self$param_set$values$type == "aft") {
         return(PredictionSurv$new(task = task, distr = pred$distr, crank = pred$lp, lp = pred$lp,
-                                  response = exp(pred$lp)))
+          response = exp(pred$lp)))
       } else {
         return(PredictionSurv$new(task = task, distr = pred$distr, crank = pred$lp, lp = pred$lp))
       }
