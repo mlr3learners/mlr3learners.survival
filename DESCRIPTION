@@ -16,15 +16,18 @@ Imports:
     distr6,
     mlr3 (>= 0.1.7),
     mlr3misc,
-    mlr3proba,
+    mlr3proba (>= 0.1.4.9000),
     paradox,
     R6,
     survival
 Suggests:
     checkmate,
+    pracma,
     rmarkdown,
     set6,
     testthat
+Remotes:
+    mlr-org/mlr3proba
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
