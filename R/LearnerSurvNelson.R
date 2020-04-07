@@ -14,11 +14,17 @@
 #' @template section_dictionary_learner
 #'
 #' @references
-#' \cite{mlr3proba}{nelson_1969}
+#' Nelson W (1969).
+#' Hazard Plotting for Incomplete Failure Data.
+#' Journal of Quality Technology, 1(1), 27–52. doi: 10.1080/00224065.1969.11980344.
 #'
-#' \cite{mlr3proba}{nelson_1972}
+#' Nelson, W. (1972).
+#' Theory and Applications of Hazard Plotting for Censored Failure Data.
+#' Technometrics, 14(4), 945–966.
 #'
-#' \cite{mlr3proba}{aalen_1978}
+#' Aalen, O. (1978).
+#' Nonparametric Inference for a Family of Counting Processes.
+#' The Annals of Statistics, 6(4), 701–726.
 #'
 #' @template seealso_learner
 #' @template example

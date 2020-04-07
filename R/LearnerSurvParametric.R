@@ -31,7 +31,9 @@
 #' @template section_dictionary_learner
 #'
 #' @references
-#' \cite{mlr3proba}{kalbfleisch_2002}
+#' Kalbfleisch, J. D., & Prentice, R. L. (2011).
+#' The statistical analysis of failure time data (Vol. 360).
+#' John Wiley & Sons.
 #'
 #' @template seealso_learner
 #' @template example
@@ -41,28 +43,30 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function() {
+      ps = ParamSet$new(
+        params = list(
+          ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"),
+                       tags = "predict"),
+          ParamUty$new(id = "na.action", tags = "train"),
+          ParamFct$new(id = "dist", default = "weibull",
+                       levels = c("weibull", "exponential", "gaussian", "logistic",
+                                  "lognormal", "loglogistic"), tags = "train"),
+          ParamUty$new(id = "parms", tags = "train"),
+          ParamUty$new(id = "init", tags = "train"),
+          ParamDbl$new(id = "scale", default = 0, lower = 0, tags = "train"),
+          ParamInt$new(id = "maxiter", default = 30L, tags = "train"),
+          ParamDbl$new(id = "rel.tolerance", default = 1e-09, tags = "train"),
+          ParamDbl$new(id = "toler.chol", default = 1e-10, tags = "train"),
+          ParamInt$new(id = "debug", default = 0, lower = 0, upper = 1, tags = "train"),
+          ParamInt$new(id = "outer.max", default = 10L, tags = "train"),
+          ParamLgl$new(id = "robust", default = FALSE, tags = "train"),
+          ParamLgl$new(id = "score", default = FALSE, tags = "train")
+        )
+      )
+
       super$initialize(
         id = "surv.parametric",
-        param_set = ParamSet$new(
-          params = list(
-            ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"),
-              tags = "predict"),
-            ParamUty$new(id = "na.action", tags = "train"),
-            ParamFct$new(id = "dist", default = "weibull",
-              levels = c("weibull", "exponential", "gaussian", "logistic",
-                "lognormal", "loglogistic"), tags = "train"),
-            ParamUty$new(id = "parms", tags = "train"),
-            ParamUty$new(id = "init", tags = "train"),
-            ParamDbl$new(id = "scale", default = 0, lower = 0, tags = "train"),
-            ParamInt$new(id = "maxiter", default = 30L, tags = "train"),
-            ParamDbl$new(id = "rel.tolerance", default = 1e-09, tags = "train"),
-            ParamDbl$new(id = "toler.chol", default = 1e-10, tags = "train"),
-            ParamInt$new(id = "debug", default = 0, lower = 0, upper = 1, tags = "train"),
-            ParamInt$new(id = "outer.max", default = 10L, tags = "train"),
-            ParamLgl$new(id = "robust", default = FALSE, tags = "train"),
-            ParamLgl$new(id = "score", default = FALSE, tags = "train")
-          )
-        ),
+        param_set = ps,
         predict_types = c("distr", "lp", "crank"),
         feature_types = c("logical", "integer", "numeric", "factor"),
         properties = "weights",
