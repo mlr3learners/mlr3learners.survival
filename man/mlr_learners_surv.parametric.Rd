@@ -14,8 +14,8 @@ This learner allows you to choose a distribution and a model form to compose a p
 survival probability distribution. Note: Just because any combination of distribution and model
 form is possible, this does not mean it will necessarily be sensible or interpretable.
 
-The internal predict method is implemented in this package as our implementation is more efficient for
-composition to distributions than \code{\link[survival:predict.survreg]{survival::predict.survreg()}}.
+The internal predict method is implemented in this package as our implementation is more
+efficient for composition to distributions than \code{\link[survival:predict.survreg]{survival::predict.survreg()}}.
 
 \code{lp} is predicted using the formula \eqn{lp = X\beta} where \eqn{X} are the variables in the test
 data set and \eqn{\beta} are the fitted coefficients.

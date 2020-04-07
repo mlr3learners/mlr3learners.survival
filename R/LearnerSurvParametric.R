@@ -11,8 +11,8 @@
 #' survival probability distribution. Note: Just because any combination of distribution and model
 #' form is possible, this does not mean it will necessarily be sensible or interpretable.
 #'
-#' The internal predict method is implemented in this package as our implementation is more efficient for
-#' composition to distributions than [survival::predict.survreg()].
+#' The internal predict method is implemented in this package as our implementation is more
+#' efficient for composition to distributions than [survival::predict.survreg()].
 #'
 #' `lp` is predicted using the formula \eqn{lp = X\beta} where \eqn{X} are the variables in the test
 #' data set and \eqn{\beta} are the fitted coefficients.
@@ -90,7 +90,8 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         pv$weights = task$weights$weight
       }
 
-      fit = mlr3misc::invoke(survival::survreg, formula = task$formula(), data = task$data(), .args = pv)
+      fit = mlr3misc::invoke(survival::survreg, formula = task$formula(), data = task$data(),
+                             .args = pv)
 
       # Fits the baseline distribution by reparameterising the fitted coefficients.
       # These were mostly derived numerically as precise documentation on the parameterisations is
