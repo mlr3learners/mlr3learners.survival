@@ -11,7 +11,7 @@
 #' survival probability distribution. Note: Just because any combination of distribution and model
 #' form is possible, this does not mean it will necessarily be sensible or interpretable.
 #'
-#' The internal predict method is implemented in this package`, which is more efficient for
+#' The internal predict method is implemented in this package as our implementation is more efficient for
 #' composition to distributions than [survival::predict.survreg()].
 #'
 #' `lp` is predicted using the formula \eqn{lp = X\beta} where \eqn{X} are the variables in the test
@@ -79,7 +79,7 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
       pars_ctrl = c("maxiter", "rel.tolerance", "toler.chol", "debug", "outer.max")
       pv = self$param_set$get_values(tags = "train")
       pv = pv[names(pv) %in% pars_ctrl]
-      ctrl = invoke(survival::survreg.control, .args = pv)
+      ctrl = mlr3misc::invoke(survival::survreg.control, .args = pv)
 
       # Adds control and other set parameters to list
       pv = self$param_set$get_values(tags = "train")
@@ -90,7 +90,7 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         pv$weights = task$weights$weight
       }
 
-      fit = invoke(survival::survreg, formula = task$formula(), data = task$data(), .args = pv)
+      fit = mlr3misc::invoke(survival::survreg, formula = task$formula(), data = task$data(), .args = pv)
 
       # Fits the baseline distribution by reparameterising the fitted coefficients.
       # These were mostly derived numerically as precise documentation on the parameterisations is
@@ -132,16 +132,15 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
       # As we are using a custom predict method the missing assertions are performed here manually
       # (as opposed to the automatic assertions that take place after prediction)
       if (any(is.na(data.frame(task$data(cols = task$feature_names))))) {
-        stop(sprintf("Learner %s on task %s failed to predict: Missing values in new data (line(s)
-%s)\n",
+        stopf("Learner %s on task %s failed to predict: Missing values in new data (line(s) %s)\n",
           self$id, task$id,
-          paste0(which(is.na(data.frame(task$data(cols = task$feature_names)))), collapse = ", ")))
+          paste0(which(is.na(data.frame(task$data(cols = task$feature_names)))), collapse = ", "))
       }
 
       pv = self$param_set$get_values(tags = "predict")
 
       # Call the predict method defined in mlr3proba
-      pred = invoke(predict_survreg, object = self$model, task = task, .args = pv)
+      pred = mlr3misc::invoke(predict_survreg, object = self$model, task = task, .args = pv)
 
       if (is.null(self$param_set$values$type)) {
         return(PredictionSurv$new(task = task, distr = pred$distr, crank = pred$lp, lp = pred$lp,

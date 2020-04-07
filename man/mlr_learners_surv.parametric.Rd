@@ -14,7 +14,7 @@ This learner allows you to choose a distribution and a model form to compose a p
 survival probability distribution. Note: Just because any combination of distribution and model
 form is possible, this does not mean it will necessarily be sensible or interpretable.
 
-The internal predict method is implemented in this package`, which is more efficient for
+The internal predict method is implemented in this package as our implementation is more efficient for
 composition to distributions than \code{\link[survival:predict.survreg]{survival::predict.survreg()}}.
 
 \code{lp} is predicted using the formula \eqn{lp = X\beta} where \eqn{X} are the variables in the test
@@ -25,7 +25,8 @@ The distribution \code{distr} is composed using the \code{lp} and specifying a m
 \itemize{
 \item Accelerated Failure Time (\code{aft}) \deqn{S(t) = S_0(\frac{t}{exp(lp)})}{S(t) = S0(t/exp(lp))}
 \item Proportional Hazards (\code{ph}) \deqn{S(t) = S_0(t)^{exp(lp)}}{S(t) = S0(t)^exp(lp)}
-\item Proportional Odds (\code{po}) \deqn{S(t) = \frac{S_0(t)}{exp(-lp) + (1-exp(-lp)) S_0(t)}}{S(t) = S0(t) / [exp(-lp) + S0(t) (1-exp(-lp))]}
+\item Proportional Odds (\code{po}) \deqn{S(t) =
+\frac{S_0(t)}{exp(-lp) + (1-exp(-lp)) S_0(t)}}{S(t) = S0(t) / [exp(-lp) + S0(t) (1-exp(-lp))]}
 }
 
 where \eqn{S_0}{S0} is the estimated baseline survival distribution (in this case

@@ -41,7 +41,7 @@ LearnerSurvNelson = R6Class("LearnerSurvNelson", inherit = LearnerSurv,
 
   private = list(
     .train = function(task) {
-      invoke(survival::survfit, formula = task$formula(1), data = task$data())
+      mlr3misc::invoke(survival::survfit, formula = task$formula(1), data = task$data())
     },
 
     .predict = function(task) {
