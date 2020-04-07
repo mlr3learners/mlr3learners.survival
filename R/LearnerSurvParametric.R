@@ -75,16 +75,7 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
   private = list(
     .train = function(task) {
 
-      # Passes control parameters to survreg.control
-      pars_ctrl = c("maxiter", "rel.tolerance", "toler.chol", "debug", "outer.max")
       pv = self$param_set$get_values(tags = "train")
-      pv = pv[names(pv) %in% pars_ctrl]
-      ctrl = mlr3misc::invoke(survival::survreg.control, .args = pv)
-
-      # Adds control and other set parameters to list
-      pv = self$param_set$get_values(tags = "train")
-      pv = pv[!(names(pv) %in% pars_ctrl)]
-      pv$control = ctrl
 
       if ("weights" %in% task$properties) {
         pv$weights = task$weights$weight
