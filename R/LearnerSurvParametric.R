@@ -46,7 +46,7 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         param_set = ParamSet$new(
           params = list(
             ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"),
-                         tags = "predict"),
+              tags = "predict"),
             ParamUty$new(id = "na.action", tags = "train"),
             ParamFct$new(id = "dist", default = "weibull",
               levels = c("weibull", "exponential", "gaussian", "logistic",

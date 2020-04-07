@@ -53,7 +53,7 @@ LearnerSurvNelson = R6Class("LearnerSurvNelson", inherit = LearnerSurv,
 
       # Define WeightedDiscrete distr6 distribution from the cumulative hazard
       x = rep(list(data = data.frame(x = self$model$time, cdf = 1 - exp(-self$model$cumhaz))),
-              task$nrow)
+        task$nrow)
       distr = distr6::VectorDistribution$new(distribution = "WeightedDiscrete", params = x,
         decorators = c("CoreStatistics", "ExoticStatistics"))
 

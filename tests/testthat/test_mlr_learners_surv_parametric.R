@@ -23,9 +23,9 @@ lung2 = lung
 lung2$status = lung2$status - 1
 lung2 = lung2[-14, c("time", "status", "ph.ecog")]
 task = TaskSurv$new("param",
-                    backend = lung2,
-                    time = "time",
-                    event = "status")
+  backend = lung2,
+  time = "time",
+  event = "status")
 
 test_that("manualtest - aft", {
   learner = lrn("surv.parametric", dist = "weibull", type = "aft")
