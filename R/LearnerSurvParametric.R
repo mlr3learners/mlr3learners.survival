@@ -135,7 +135,7 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
 
       pv = self$param_set$get_values(tags = "predict")
 
-      # Call the predict method defined in mlr3proba
+      # Call the predict method defined here
       pred = mlr3misc::invoke(predict_survreg, object = self$model, task = task, .args = pv)
 
       if (is.null(self$param_set$values$type)) {
