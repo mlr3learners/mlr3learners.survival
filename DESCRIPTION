@@ -7,8 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "raphael.sonabend.15@ucl.ac.uk",
            comment = c(ORCID = "0000-0001-9225-4654"))
-Description: Adds learners from the {survival} package to 'mlr3'.
+Description: Adds learners from the {survival} package to
+    'mlr3'.
 License: LGPL-3
+URL: https://github.com/mlr3learners/mlr3learners.survival
 Depends:
     R (>= 3.1.0)
 Imports:
