@@ -60,7 +60,8 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
           ParamInt$new(id = "debug", default = 0, lower = 0, upper = 1, tags = "train"),
           ParamInt$new(id = "outer.max", default = 10L, tags = "train"),
           ParamLgl$new(id = "robust", default = FALSE, tags = "train"),
-          ParamLgl$new(id = "score", default = FALSE, tags = "train")
+          ParamLgl$new(id = "score", default = FALSE, tags = "train"),
+          ParamUty$new(id = "cluster", tags = "train")
         )
       )
 
