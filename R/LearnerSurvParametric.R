@@ -48,9 +48,9 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
           ParamFct$new(id = "type", default = "aft", levels = c("aft", "ph", "po"),
                        tags = "predict"),
           ParamUty$new(id = "na.action", tags = "train"),
-          ParamFct$new(id = "dist", default = "weibull",
-                       levels = c("weibull", "exponential", "gaussian", "logistic",
-                                  "lognormal", "loglogistic"), tags = "train"),
+          ParamFct$new(id = "dist", default = "Weibull",
+                       levels = c("Weibull", "Exponential", "Normal", "Logistic",
+                                  "Lognormal", "Loglogistic"), tags = "train"),
           ParamUty$new(id = "parms", tags = "train"),
           ParamUty$new(id = "init", tags = "train"),
           ParamDbl$new(id = "scale", default = 0, lower = 0, tags = "train"),
@@ -100,23 +100,23 @@ LearnerSurvParametric = R6Class("LearnerSurvParametric", inherit = LearnerSurv,
         scale = eps
       }
 
-      if (location < -709 & fit$dist %in% c("weibull", "exponential", "loglogistic")) {
+      if (location < -709 & fit$dist %in% c("Weibull", "Exponential", "Loglogistic")) {
         location = -709
       }
 
 
       basedist = switch(fit$dist,
-        "gaussian" = distr6::Normal$new(mean = location, sd = scale,
+        "Normal" = distr6::Normal$new(mean = location, sd = scale,
           decorators = "ExoticStatistics"),
-        "weibull" = distr6::Weibull$new(shape = 1 / scale, scale = exp(location),
+        "Weibull" = distr6::Weibull$new(shape = 1 / scale, scale = exp(location),
           decorators = "ExoticStatistics"),
-        "exponential" = distr6::Exponential$new(scale = exp(location),
+        "Exponential" = distr6::Exponential$new(scale = exp(location),
           decorators = "ExoticStatistics"),
-        "logistic" = distr6::Logistic$new(mean = location, scale = scale,
+        "Logistic" = distr6::Logistic$new(mean = location, scale = scale,
           decorators = "ExoticStatistics"),
-        "lognormal" = distr6::Lognormal$new(meanlog = location, sdlog = scale,
+        "Lognormal" = distr6::Lognormal$new(meanlog = location, sdlog = scale,
           decorators = "ExoticStatistics"),
-        "loglogistic" = distr6::Loglogistic$new(scale = exp(location),
+        "Loglogistic" = distr6::Loglogistic$new(scale = exp(location),
           shape = 1 / scale,
           decorators = "ExoticStatistics")
       )
