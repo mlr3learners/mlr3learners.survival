@@ -1,6 +1,7 @@
 # mlr3learners.survival 0.1.2
 
 * distr6 patch
+* Add `quantile` to predicted distributions
 
 # mlr3learners.survival 0.1.1
 
