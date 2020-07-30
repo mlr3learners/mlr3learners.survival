@@ -23,6 +23,7 @@ Imports:
     R6,
     survival
 Suggests:
+    actuar,
     checkmate,
     pracma,
     rmarkdown,
