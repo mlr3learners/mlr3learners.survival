@@ -52,42 +52,48 @@ predict_survreg = function(object, task, type = "aft") {
     },
     cdf = function() {
     },
-    parameters = ParameterSet$new("Ignore.", 1, set6::Set$new(1))
+    parameters = ParameterSet$new()
   ))
 
   params = rep(params, length(lp))
 
-  cdf = function(x1) {
-  }
-  pdf = function(x1) {
-  }
+  pdf = function(x) {} # nolint
+  cdf = function(x) {} # nolint
+  quantile = function(p) {} # nolint
 
   if (type == "ph") {
     for (i in seq_along(lp)) {
-      body(cdf) = substitute(1 - (basedist$survival(x1)^exp(x)), list(x = lp[i]))
-      body(pdf) = substitute((exp(x) * basedist$hazard(x1)) * (1 - self$cdf(x1)), list(x = lp[i]))
+      body(pdf) = substitute((exp(y) * basedist$hazard(x)) * (1 - self$cdf(x)), list(y = lp[i]))
+      body(cdf) = substitute(1 - (basedist$survival(x)^exp(y)), list(y = lp[i]))
+      body(quantile) = substitute(basedist$quantile(1 - exp(exp(-y)*log(1 - p))), list(y = lp[i]))
       params[[i]]$pdf = pdf
       params[[i]]$cdf = cdf
+      params[[i]]$quantile = quantile
     }
   } else if (type == "aft") {
     for (i in seq_along(lp)) {
-      body(cdf) = substitute(1 - (basedist$survival(x1 / exp(x))), list(x = lp[i]))
-      body(pdf) = substitute((exp(-x) * basedist$hazard(x1 / exp(x))) * (1 - self$cdf(x1)),
-        list(x = lp[i]))
+      body(pdf) = substitute((exp(-y) * basedist$hazard(x / exp(y))) * (1 - self$cdf(x)),
+                             list(y = lp[i]))
+      body(cdf) = substitute(1 - (basedist$survival(x / exp(y))), list(y = lp[i]))
+      body(quantile) = substitute(exp(y) * basedist$quantile(p), list(y = lp[i]))
       params[[i]]$pdf = pdf
       params[[i]]$cdf = cdf
+      params[[i]]$quantile = quantile
     }
   } else if (type == "po") {
     for (i in seq_along(lp)) {
-      body(cdf) = substitute(1 - (basedist$survival(x1) *
-        (exp(-x) + (1 - exp(-x)) * basedist$survival(x1))^-1),
-      list(x = lp[i]))
-      body(pdf) = substitute((basedist$hazard(x1) *
-        (1 - (basedist$survival(x1) /
-          (((exp(x) - 1)^-1) + basedist$survival(x1))))) *
-        (1 - self$cdf(x1)), list(x = lp[i]))
+      body(pdf) = substitute((basedist$hazard(x) *
+                                (1 - (basedist$survival(x) /
+                                        (((exp(y) - 1)^-1) + basedist$survival(x))))) *
+                               (1 - self$cdf(x)), list(y = lp[i]))
+      body(cdf) = substitute(1 - (basedist$survival(x) *
+        (exp(-y) + (1 - exp(-y)) * basedist$survival(x))^-1),
+      list(y = lp[i]))
+      body(quantile) = substitute(basedist$quantile(-p / ((exp(-y)*(p - 1)) - p)),
+                                  list(y = lp[i]))
       params[[i]]$pdf = pdf
       params[[i]]$cdf = cdf
+      params[[i]]$quantile = quantile
     }
   }
 

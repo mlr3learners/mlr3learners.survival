@@ -60,3 +60,21 @@ test_that("missing", {
   learner$train(task)
   expect_error(learner$predict(tsk("lung")))
 })
+
+test_that('quantile', {
+  learner = lrn("surv.parametric", dist = "weibull", type = "aft")$train(task)
+  p = lrn("surv.parametric", dist = "weibull", type = "aft")$train(task)$predict(task)
+  quantile = p$distr$quantile(c(0.2, 0.8))
+  expect_equal(matrix(t(quantile), ncol = 2),
+               predict(learner$model$fit, type = "quantile", p = c(0.2, 0.8)))
+  quantile = p$distr$quantile(0.5)
+  expect_equal(unlist(p$distr$cdf(quantile), use.names = FALSE), rep(0.5, 227))
+
+  p = lrn("surv.parametric", dist = "weibull", type = "ph")$train(task)$predict(task)
+  quantile = p$distr$quantile(0.5)
+  expect_equal(unlist(p$distr$cdf(quantile), use.names = FALSE), rep(0.5, 227))
+
+  p = lrn("surv.parametric", dist = "weibull", type = "po")$train(task)$predict(task)
+  quantile = p$distr$quantile(0.5)
+  expect_equal(unlist(p$distr$cdf(quantile), use.names = FALSE), rep(0.5, 227))
+})
