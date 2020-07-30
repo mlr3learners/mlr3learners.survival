@@ -48,11 +48,11 @@ predict_survreg = function(object, task, type = "aft") {
     variateForm = "univariate",
     description = description,
     .suppressChecks = TRUE,
-    suppressMoments = TRUE,
     pdf = function() {
     },
     cdf = function() {
-    }
+    },
+    parameters = ParameterSet$new("Ignore.", 1, set6::Set$new(1))
   ))
 
   params = rep(params, length(lp))
@@ -91,9 +91,12 @@ predict_survreg = function(object, task, type = "aft") {
     }
   }
 
+  distlist = lapply(params, function(.x) do.call(Distribution$new, .x))
+  names(distlist) = paste0("WeibullAFT", seq_along(distlist))
 
-  distr = distr6::VectorDistribution$new(distribution = "Distribution", params = params,
-    decorators = c("CoreStatistics", "ExoticStatistics"))
+
+  distr = distr6::VectorDistribution$new(distlist,
+                                         decorators = c("CoreStatistics", "ExoticStatistics"))
 
   lp = lp + fit$coefficients[1]
 
