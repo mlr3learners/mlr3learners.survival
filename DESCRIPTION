@@ -15,7 +15,7 @@ Depends:
     R (>= 3.1.0)
 Imports:
     data.table,
-    distr6 (>= 1.4.2),
+    distr6 (>= 1.4.2.9000),
     mlr3 (>= 0.3.0),
     mlr3misc,
     mlr3proba (>= 0.2.0),
@@ -29,6 +29,8 @@ Suggests:
     rmarkdown,
     set6,
     testthat
+Remotes:
+    alan-turing-institute/distr6
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
