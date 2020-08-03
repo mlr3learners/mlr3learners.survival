@@ -21,7 +21,7 @@ predict_survreg = function(object, task, type = "aft") {
   # AFT: h(t) = exp(-lp)h0(t/exp(lp))
   # PO: h(t)/h0(t) = {1 + (exp(lp)-1)S0(t)}^-1
 
-  dist = mlr3proba:::toproper(fit$dist)
+  dist = toproper(fit$dist)
 
   if (type == "ph") {
     name = paste(dist, "Proportional Hazards Model")
