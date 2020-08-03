@@ -65,7 +65,7 @@ predict_survreg = function(object, task, type = "aft") {
     for (i in seq_along(lp)) {
       body(pdf) = substitute((exp(y) * basedist$hazard(x)) * (1 - self$cdf(x)), list(y = lp[i]))
       body(cdf) = substitute(1 - (basedist$survival(x)^exp(y)), list(y = lp[i]))
-      body(quantile) = substitute(basedist$quantile(1 - exp(exp(-y)*log(1 - p))), list(y = lp[i]))
+      body(quantile) = substitute(basedist$quantile(1 - exp(exp(-y) * log(1 - p))), list(y = lp[i])) # nolint
       params[[i]]$pdf = pdf
       params[[i]]$cdf = cdf
       params[[i]]$quantile = quantile
@@ -89,7 +89,7 @@ predict_survreg = function(object, task, type = "aft") {
       body(cdf) = substitute(1 - (basedist$survival(x) *
         (exp(-y) + (1 - exp(-y)) * basedist$survival(x))^-1),
       list(y = lp[i]))
-      body(quantile) = substitute(basedist$quantile(-p / ((exp(-y)*(p - 1)) - p)),
+      body(quantile) = substitute(basedist$quantile(-p / ((exp(-y) * (p - 1)) - p)), # nolint
                                   list(y = lp[i]))
       params[[i]]$pdf = pdf
       params[[i]]$cdf = cdf

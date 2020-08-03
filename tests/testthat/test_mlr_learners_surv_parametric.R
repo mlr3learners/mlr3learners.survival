@@ -3,7 +3,7 @@ context("surv.parametric")
 test_that("autotest", {
   learner = mlr_learners$get("surv.parametric")
   expect_learner(learner)
-  result = run_autotest(learner, check_replicable=FALSE)
+  result = run_autotest(learner, check_replicable = FALSE)
   expect_true(result, info = result$error)
 
   task = tsk("rats")
@@ -61,7 +61,7 @@ test_that("missing", {
   expect_error(learner$predict(tsk("lung")))
 })
 
-test_that('quantile', {
+test_that("quantile", {
   learner = lrn("surv.parametric", dist = "weibull", type = "aft")$train(task)
   p = lrn("surv.parametric", dist = "weibull", type = "aft")$train(task)$predict(task)
   quantile = p$distr$quantile(c(0.2, 0.8))
