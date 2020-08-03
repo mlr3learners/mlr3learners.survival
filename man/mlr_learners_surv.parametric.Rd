@@ -40,6 +40,15 @@ lrn("surv.nelson")
 }
 }
 
+\examples{
+if (requireNamespace("survival")) {
+  learner = mlr3::lrn("surv.nelson")
+  print(learner)
+
+  # available parameters:
+  learner$param_set$ids()
+}
+}
 \references{
 Kalbfleisch, J. D., & Prentice, R. L. (2011).
 The statistical analysis of failure time data (Vol. 360).

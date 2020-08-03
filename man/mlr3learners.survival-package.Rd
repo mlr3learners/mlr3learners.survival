@@ -6,7 +6,15 @@
 \alias{mlr3learners.survival-package}
 \title{mlr3learners.survival: Learners from the {survival} package for 'mlr3'}
 \description{
-Adds learners from the {survival} package to 'mlr3'.
+Adds learners from the {survival} package to
+    'mlr3'.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mlr3learners/mlr3learners.survival}
+}
+
 }
 \author{
 \strong{Maintainer}: Raphael Sonabend \email{raphael.sonabend.15@ucl.ac.uk} (\href{https://orcid.org/0000-0001-9225-4654}{ORCID})
