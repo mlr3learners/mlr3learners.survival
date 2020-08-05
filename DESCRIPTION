@@ -1,6 +1,6 @@
 Package: mlr3learners.survival
 Title: Learners from the {survival} package for 'mlr3'
-Version: 0.1.2
+Version: 0.1.2.9000
 Authors@R:
     person(given = "Raphael",
            family = "Sonabend",
