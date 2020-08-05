@@ -16,9 +16,9 @@ Depends:
 Imports:
     data.table,
     distr6 (>= 1.4.2.9000),
-    mlr3 (>= 0.3.0),
+    mlr3 (>= 0.4.0-9000),
     mlr3misc,
-    mlr3proba (>= 0.2.0),
+    mlr3proba (>= 0.2.0.9000),
     paradox,
     R6,
     survival
@@ -30,7 +30,9 @@ Suggests:
     set6,
     testthat
 Remotes:
-    alan-turing-institute/distr6
+    alan-turing-institute/distr6,
+    mlr-org/mlr3,
+    mlr-org/mlr3proba
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
